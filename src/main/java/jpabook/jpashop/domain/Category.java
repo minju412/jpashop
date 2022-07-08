@@ -25,10 +25,20 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
+
+    /**
+     * 연관관계 편의 메서드
+     * 양방향 관계에서 정의할 수 있다.
+     * 둘 중에 핵심적으로 컨트롤 하고 있는 쪽에 생성한다.
+     */
+    public void addChildCategory(Category child){
+        this.child.add(child);
+        child.setParent(this);
+    }
 }
